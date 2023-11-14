@@ -2,6 +2,9 @@
 name = "tera-macro"
 version = "0.0.1"
 edition = "2021"
+description = "Macro for writing compile time Rust code with Tera templates"
+repository = "https://github.com/mcmah309/tera-macro"
+license = "MIT"
 
 [lib]
 proc-macro = true
