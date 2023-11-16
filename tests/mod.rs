@@ -9,12 +9,6 @@ fn it_works() {
     assert_eq!(result, 1);
 
     tera! {
-        r#"{ "x" : "2" }"#,
-        let result: usize = {{ x }};
-    }
-    assert_eq!(result, 2);
-
-    tera! {
         [todd, 2],
         let {{ val0 }}: usize = {{ val1 }};
     }
@@ -25,6 +19,18 @@ fn it_works() {
         let {{ val }}: usize = 1;
     }
     assert_eq!(bob, 1);
+
+    tera! {
+        "dave",
+        let {{ val }}: usize = 1;
+    }
+    assert_eq!(dave, 1);
+
+    tera! {
+        "john",
+        let john = "this is john";
+    }
+    assert_eq!(john, "this is john");
 }
 
 #[test]
@@ -52,7 +58,7 @@ macro_rules! inside_another_macro {
 }
 
 inside_another_macro! {
-        r#"{ "value" : "313" }"#,
+        { "value" : "313" },
 struct TestStruct {
     val: i64
 }

@@ -6,7 +6,7 @@ use std::ops::Add;
 use anyhow::{bail, Context};
 use proc_macro2::{Span, TokenStream};
 use serde_json::{Map, Number, Value};
-use syn::{Lit, LitStr};
+use syn::Lit;
 use syn::__private::ToTokens;
 use syn::parse::{Parse, ParseStream};
 use tera::Tera;
@@ -80,8 +80,7 @@ fn parse_into_context_and_template(input_as_tokens: proc_macro::TokenStream) -> 
             }
             Value::Object(json)
         }
-        FirstArg::ArrayOfVals(brace) => to_value(brace)?,
-        FirstArg::String(string) => to_value(string)?,
+        FirstArg::ArrayOfVals(brace) => string_to_json(brace)?,
         FirstArg::Val(val) => {
             let mut json: Map<String, Value> = Map::new();
             json.insert("val".to_owned(), val);
@@ -89,7 +88,7 @@ fn parse_into_context_and_template(input_as_tokens: proc_macro::TokenStream) -> 
         }
     };
     if cfg!(feature = "debug_print") {
-        println!("Successfully go context and template");
+        println!("Successfully got context and template");
         println!("context: {}", context);
         println!("template: {}", parsed.template);
     }
@@ -98,7 +97,7 @@ fn parse_into_context_and_template(input_as_tokens: proc_macro::TokenStream) -> 
     // Err("Could not determine the type of the context.".into())
 }
 
-fn to_value(to_json: String) -> anyhow::Result<Value> {
+fn string_to_json(to_json: String) -> anyhow::Result<Value> {
     if cfg!(feature = "debug_print") {
         println!("String to be converted to json: {}", to_json);
     }
@@ -109,8 +108,6 @@ fn to_value(to_json: String) -> anyhow::Result<Value> {
 enum FirstArg {
     // Brace
     Json(syn::ExprArray),
-    // string before jsonify
-    String(String),
     // Bracket
     ArrayOfVals(String),
     // A literal or an Ident
@@ -144,13 +141,6 @@ impl Parse for TeraMacroInput {
                 println!("First argument has been identified as Json.");
             }
             context = input.parse().map(FirstArg::Json)?;
-            input.parse::<syn::token::Comma>()?;
-            template = input.parse::<TokenStream>()?.to_string();
-        } else if lookahead.peek(LitStr) {
-            if cfg!(feature = "debug_print") {
-                println!("First argument has been identified as Json string.");
-            }
-            context = FirstArg::String(input.parse::<syn::LitStr>()?.value());
             input.parse::<syn::token::Comma>()?;
             template = input.parse::<TokenStream>()?.to_string();
         } else if lookahead.peek(syn::token::Brace) {
