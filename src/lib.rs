@@ -29,6 +29,7 @@ pub fn tera(tokens: proc_macro::TokenStream) -> proc_macro::TokenStream {
     }
     let token_stream: TokenStream = syn::parse_str(&render_output)
         .expect("Could not converted the rendered output into a valid token stream");
+    // todo pretty please formatting https://github.com/dtolnay/prettyplease#example
     proc_macro::TokenStream::from(token_stream)
 }
 
