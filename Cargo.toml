@@ -19,3 +19,10 @@ serde = "1.0.192"
 serde_json = "1.0.108"
 unicode-segmentation = "1.10.1"
 unescape = "0.1.0"
+anyhow = "1.0.75"
+
+
+[features]
+default = []
+# If enabled, debug info will be printed to stdout during build. Useful for debugging.
+debug_print = []

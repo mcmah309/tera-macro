@@ -1,5 +1,3 @@
-use std::fmt::Debug;
-
 use tera_macro::tera;
 
 #[test]
@@ -93,7 +91,7 @@ tera! {
 
 #[test]
 fn to_pascal_case_single_macro() {
-    let result = toPascalCase;
+    let _ = toPascalCase;
 }
 
 
@@ -120,5 +118,5 @@ to_pascal_case! { ToPascalCase2 }
 
 #[test]
 fn to_pascal_case_inside_another_macro() {
-    let result = toPascalCase2;
+    let _ = toPascalCase2;
 }
