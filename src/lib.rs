@@ -6,8 +6,8 @@ use std::ops::Add;
 use anyhow::{bail, Context};
 use proc_macro2::{Span, TokenStream};
 use serde_json::{Map, Number, Value};
-use syn::Lit;
 use syn::__private::ToTokens;
+use syn::Lit;
 use syn::parse::{Parse, ParseStream};
 use tera::Tera;
 use unicode_segmentation::UnicodeSegmentation;
@@ -93,8 +93,6 @@ fn parse_into_context_and_template(input_as_tokens: proc_macro::TokenStream) -> 
         println!("template: {}", parsed.template);
     }
     Ok((context, parsed.template))
-
-    // Err("Could not determine the type of the context.".into())
 }
 
 fn string_to_json(to_json: String) -> anyhow::Result<Value> {
